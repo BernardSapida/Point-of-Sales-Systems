@@ -10,6 +10,7 @@ class Terminal:
   # While True, display the menu
   # Creating an instance of the Account class & Inventory class.
   def start(self):
+    # Facade Design
     self.account = Account()
     self.inventory = Inventory()
 
