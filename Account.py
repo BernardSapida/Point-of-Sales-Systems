@@ -1,16 +1,14 @@
+import json
+
 class Account:
   """
-    It creates a list of dictionaries, each dictionary containing a username, fullname, role, and
-    password
-    """
-
+  It creates a list of dictionaries, each dictionary containing a username, fullname, role, and
+  password
+  """
   def __init__(self):
-    self.accounts = [{
-      "Username": "Admin",
-      "Fullname": "Administrator",
-      "Role": "ADMIN",
-      "Password": "admin123"
-    }]
+    with open('database.json') as f:
+      self.database = json.load(f)
+      self.accounts = self.database["accounts"]
 
   # It asks for a username and password
   def login(self):
@@ -22,15 +20,10 @@ class Account:
 
       # if the username and password are valid, it returns the username.
       if (self.validCredential(username, password)):
-        print(
-          "\n====================================================================\n"
-        )
+        print("\n====================================================================\n")
         return username
-      print(
-        "Invalid login credentials. Forgot your password? contact your admin.")
-      print(
-        "\n====================================================================\n"
-      )
+      print("Invalid login credentials. Forgot your password? contact your admin.")
+      print("\n====================================================================\n")
 
   # It creates an account
   def signUp(self):
@@ -43,9 +36,7 @@ class Account:
     while (True):
       if (role == "ADMIN" or role == "CASHIER"): break
       print("Role should be ADMIN or CASHIER! Please try again.")
-      print(
-        "\n====================================================================\n"
-      )
+      print("\n====================================================================\n")
       role = input("Role (ADMIN/CASHIER): ")
 
     password = input("Password: ")
@@ -55,9 +46,7 @@ class Account:
     while (True):
       if (password == confirmPassword): break
       print("Password and Confirm Password didn't matched! Please try again.")
-      print(
-        "\n====================================================================\n"
-      )
+      print("\n====================================================================\n")
       confirmPassword = input("Re-type Password: ")
 
     # It adds a new account to the list of accounts.
@@ -68,19 +57,21 @@ class Account:
       "Password": password
     })
 
+    self.database["accounts"] = self.accounts;
+
+    with open('database.json', 'w') as f:
+      json.dump(self.database, f, indent=2)
+
     print("\nYour account has been created. You may now login.")
-    print(
-      "\n====================================================================\n"
-    )
+    print("\n====================================================================\n")
 
   """
-    It checks if the username and password are in the accounts list
+  It checks if the username and password are in the accounts list
     
-    :param username: The username of the account
-    :param password: The password of the account
-    :return: a boolean value.
-    """
-
+  :param username: The username of the account
+  :param password: The password of the account
+  :return: a boolean value.
+  """
   def validCredential(self, username, password):
     for account in self.accounts:
       if (account["Username"] == username and account["Password"] == password):
